@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071611">
+  <meta name="description" content="PINPOINT Golf Lab — an interactive golf shot simulator. Pick your club, adjust power and aim, read the wind, and take your shot.">
+  <title>PINPOINT — Golf Shot Simulator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Pinpoint Golf Lab home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M9 27V5m0 1 14 4-14 5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="28" r="2" fill="currentColor"/></svg></span>
+        <span><strong>PINPOINT</strong><small>GOLF LAB</small></span>
+      </a>
+      <div class="header-right">
+        <span class="live-dot"><span></span> INTERACTIVE EXPERIENCE</span>
+        <button class="text-button help-button" id="helpBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4.3 1.7c-1.4 1.1-1.8 1.5-1.8 3M12 17h.01"/></svg> How to play</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="eyebrow"><span class="eyebrow-line"></span> THE RANGE IS OPEN <span class="eyebrow-line"></span></div>
+        <h1>Every shot is <em>your call.</em></h1>
+        <p>Read the wind. Choose your club. Dial in your swing.<br class="desktop-only"> Then see where the ball lands.</p>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="course-panel" aria-labelledby="courseTitle">
+          <div class="course-header">
+            <div>
+              <div class="section-kicker">THE COURSE <span class="sep">/</span> HOLE 07</div>
+              <h2 id="courseTitle">The Ridge <span class="hole-label">PAR 3</span></h2>
+            </div>
+            <div class="hole-distance"><strong>178</strong><span>YARDS TO PIN</span></div>
+          </div>
+
+          <div class="course-stage" id="courseStage" aria-label="Interactive aerial view of a par-three golf hole. Click or tap the course to aim.">
+            <canvas id="courseCanvas" width="940" height="785" role="img" aria-label="Overhead golf course with tee box, fairway, green, bunkers and animated golf ball"></canvas>
+            <div class="canvas-top-left"><span class="tiny-dot"></span> LIVE SHOT PREVIEW</div>
+            <div class="canvas-top-right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="5"/></svg> TOP-DOWN VIEW</div>
+            <div class="canvas-hint" id="canvasHint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14m-7-7v14"/></svg> CLICK ANYWHERE TO AIM</div>
+            <div class="shot-announcement" id="shotAnnouncement" aria-live="polite" hidden>
+              <span id="shotLabel">ON THE GREEN</span>
+              <strong id="shotDistance">12.6 yd from pin</strong>
+            </div>
+          </div>
+          <div class="course-footer"><span><i class="legend-dot legend-target"></i> PROJECTED LANDING</span><span><i class="legend-dot legend-ball"></i> YOUR BALL</span><span class="course-footer-tip">TIP: CLICK COURSE TO SET AIM</span></div>
+        </section>
+
+        <aside class="controls-panel" aria-labelledby="controlsTitle">
+          <div class="controls-heading"><div><div class="section-kicker">YOUR GAME PLAN</div><h2 id="controlsTitle">Set up your shot<span class="accent-dot">.</span></h2></div><span class="step-indicator">01 — 04</span></div>
+          <section class="control-section club-section">
+            <div class="control-title-row"><label class="control-label" for="clubSelect">01 <span>SELECT YOUR CLUB</span></label><span class="muted-note" id="clubNote">Long iron</span></div>
+            <div class="club-grid" id="clubGrid" role="group" aria-label="Select golf club">
+              <button class="club-button" data-club="DR" type="button">DR<span>DRIVER</span></button>
+              <button class="club-button" data-club="3W" type="button">3W<span>WOOD</span></button>
+              <button class="club-button active" data-club="5I" type="button" aria-pressed="true">5I<span>IRON</span></button>
+              <button class="club-button" data-club="7I" type="button">7I<span>IRON</span></button>
+              <button class="club-button" data-club="9I" type="button">9I<span>IRON</span></button>
+              <button class="club-button" data-club="PW" type="button">PW<span>WEDGE</span></button>
+              <button class="club-button" data-club="SW" type="button">SW<span>WEDGE</span></button>
+            </div>
+            <div class="club-detail"><span>STANDARD CARRY</span><span><strong id="baseCarry">185</strong> yd</span></div>
+          </section>
+          <section class="control-section range-section">
+            <div class="control-title-row"><label class="control-label" for="powerSlider">02 <span>SWING POWER</span></label><div class="value-readout"><strong id="powerValue">96</strong><span>%</span></div></div>
+            <input id="powerSlider" class="range-control" type="range" min="40" max="110" step="1" value="96" aria-label="Swing power percentage">
+            <div class="range-extremes"><span>CONTROLLED</span><span>FULL SEND</span></div>
+          </section>
+          <section class="control-section range-section">
+            <div class="control-title-row"><label class="control-label" for="aimSlider">03 <span>SHOT DIRECTION</span></label><div class="value-readout"><strong id="aimValue">0</strong><span>°</span></div></div>
+            <input id="aimSlider" class="range-control" type="range" min="-35" max="35" step="1" value="0" aria-label="Aim angle in degrees; negative is left, positive is right">
+            <div class="range-extremes"><span>← LEFT</span><span>RIGHT →</span></div>
+          </section>
+          <section class="control-section wind-section">
+            <div class="control-title-row"><label class="control-label" for="windSlider">04 <span>WIND CONDITIONS</span></label><span class="wind-strength" id="windLabel">LIGHT BREEZE</span></div>
+            <div class="wind-topline"><div class="wind-icon" id="windArrow" aria-hidden="true">↑</div><div class="wind-numbers"><strong id="windValue">6</strong><span>MPH<br>WIND</span></div><div class="wind-direction-info">BLOWING<br><strong id="windName">NORTH</strong></div></div>
+            <input id="windSlider" class="range-control" type="range" min="0" max="25" step="1" value="6" aria-label="Wind speed in miles per hour">
+            <div class="wind-buttons" role="group" aria-label="Wind direction, where wind is blowing toward">
+              <button type="button" data-wind="W">← WEST</button><button class="active" type="button" data-wind="N" aria-pressed="true">↑ NORTH</button><button type="button" data-wind="S">↓ SOUTH</button><button type="button" data-wind="E">→ EAST</button>
+            </div>
+            <button class="shuffle-wind" id="shuffleWind" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h3c5 0 5 10 10 10h3M17 14l3 3-3 3M4 17h3c2 0 3-2 4-4m2-3c1-2 2-3 4-3h3m-3-3 3 3-3 3"/></svg> RANDOMIZE WIND</button>
+          </section>
+          <div class="projection-card"><div class="projection-top"><span><i class="tiny-dot"></i> SHOT FORECAST</span><span>LIVE</span></div><div class="projection-data"><div><span>EST. TOTAL</span><strong id="estDistance">183 <small>yd</small></strong></div><div><span>FROM PIN</span><strong id="estMiss">9.4 <small>yd</small></strong></div><div><span>LANDING ZONE</span><strong id="estZone" class="zone-text">GREEN</strong></div></div></div>
+          <button class="shoot-button" id="shootBtn" type="button"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 17 10-10M7 7h10v10"/></svg> TAKE YOUR SHOT</span><small>SPACE ↵</small></button>
+          <div class="post-shot-buttons"><button id="resetBtn" type="button">↺ RESET ROUND</button><button id="newSetupBtn" type="button">↻ NEW CONDITIONS</button></div>
+        </aside>
+      </div>
+
+      <section class="scoreboard" aria-labelledby="scoreboardTitle">
+        <div class="scoreboard-header"><div><div class="section-kicker">YOUR PERFORMANCE</div><h2 id="scoreboardTitle">The scorecard<span class="accent-dot">.</span></h2></div><span class="round-status" id="roundStatus">PRACTICE MODE</span></div>
+        <div class="stats-grid"><article class="stat-card"><span>SHOTS TAKEN</span><div><strong id="statShots">0</strong><small>THIS SESSION</small></div></article><article class="stat-card"><span>CLOSEST TO PIN</span><div><strong id="statClosest">—</strong><small id="closestUnits">YARDS</small></div></article><article class="stat-card"><span>GREENS HIT</span><div><strong id="statGreens">0</strong><small>IN REGULATION*</small></div></article><article class="stat-card"><span>LAST SHOT</span><div><strong id="statLast">—</strong><small id="lastUnits">TOTAL YARDS</small></div></article></div>
+        <div class="shot-history"><div class="history-heading"><h3>SHOT HISTORY</h3><span>YOUR LAST 6 SHOTS</span></div><div class="history-items" id="historyItems"><p class="empty-history">No shots yet. Your first swing is waiting.</p></div></div>
+        <p class="footnote">* Practice scoring: counts a ball finishing on the green. Distances and ball physics are illustrative, not professional launch-monitor measurements.</p>
+      </section>
+    </main>
+    <footer class="site-footer"><span><span class="footer-symbol">✳</span> PINPOINT GOLF LAB</span><span>BUILT FOR THE LOVE OF THE GAME · 2026</span><span>DESIGNED TO PLAY. MADE TO EXPLORE.</span></footer>
+  </div>
+  <dialog id="helpDialog" class="help-dialog"><div class="modal-content"><button class="dialog-close" id="closeHelp" type="button" aria-label="Close instructions">✕</button><div class="section-kicker">YOUR QUICK START</div><h2>Welcome to the range.</h2><p>You're standing on the tee of a 178-yard par 3. The goal is to get your ball as close to the flag as you can.</p><ol><li><strong>Pick a club.</strong> Each has a different typical carry distance and roll.</li><li><strong>Set your power and aim.</strong> The dotted line previews where the ball might finish. You can also click the course to aim.</li><li><strong>Read the wind.</strong> North is a tailwind toward the green; East pushes the ball right. Turn wind up for an extra challenge.</li><li><strong>Take your shot.</strong> Watch the ball fly and check your scorecard. Try a different setup to beat your record.</li></ol><p class="modal-note">Tip: Press <kbd>Space</kbd> to shoot. Everything runs in your browser — no account needed.</p><button id="gotItBtn" class="shoot-button" type="button">LET'S PLAY <span>↗</span></button></div></dialog>
+  <script src="app.js"></script>
+</body>
+</html>
